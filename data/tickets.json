@@ -1,0 +1,12 @@
+[
+    {
+        "id": "T001",
+        "title": "Wifi",
+        "category": "Network",
+        "urgency": "high",
+        "affected_users": 20,
+        "priority": "critical",
+        "status": "open",
+        "assigned_to": null
+    }
+]

@@ -31,6 +31,9 @@ class TestStorage(unittest.TestCase):
             {
                 "id": "T001",
                 "title": "Wi-Fi down",
+                "category": "Network",
+                "urgency": "high",
+                "affected_users": 12,
                 "priority": "critical",
                 "status": "open",
                 "assigned_to": None,

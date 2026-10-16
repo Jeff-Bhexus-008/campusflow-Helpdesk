@@ -31,6 +31,8 @@ class TestWorkflow(unittest.TestCase):
         self.assertFalse(assign_ticket(self.tickets, "T001", " "))
 
     def test_update_status(self):
+        self.assertTrue(assign_ticket(self.tickets, "T001", "Jeff"))
+
         result = update_ticket_status(
             self.tickets, "T001", "in_progress"
         )
@@ -39,6 +41,8 @@ class TestWorkflow(unittest.TestCase):
         self.assertEqual(self.tickets[0]["status"], "in_progress")
 
     def test_status_accepts_spaces(self):
+        self.assertTrue(assign_ticket(self.tickets, "T001", "Jeff"))
+
         result = update_ticket_status(
             self.tickets, "T001", "in progress"
         )

@@ -6,7 +6,37 @@ from campusflow.workflow import (
     get_queue,
     generate_report,
 )
+from campusflow.search import (
+    search_tickets,
+    search_tickets_cli,
+    sort_search_results,
+)
 
+from campusflow.reports import display_report
+
+from campusflow.notes_cli import (
+    add_follow_up_note,
+    view_ticket_notes,
+)
+
+from campusflow.understanding_check import (
+    run_understanding_check,
+)
+from campusflow.notes import add_note
+from campusflow.workflow import (
+    assign_ticket,
+    update_ticket_status,
+    get_queue,
+    generate_report,
+    find_ticket,
+)
+
+
+def save_follow_up_note(tickets, ticket_id, author, message):
+    """Create a note and save the updated tickets."""
+    note_id = add_note(tickets, ticket_id, author, message)
+    save_tickets(tickets)
+    return note_id
 
 def display_tickets(tickets):
     """Display tickets in priority order."""
@@ -69,19 +99,8 @@ def change_ticket_status(tickets):
 
 
 def show_report(tickets):
-    """Display ticket statistics."""
-    report = generate_report(tickets)
-
-    print(f"\nTotal tickets: {report['total']}")
-
-    print("\nTickets by status:")
-    for status, count in report["by_status"].items():
-        print(f"{status}: {count}")
-
-    print("\nTickets by priority:")
-    for priority, count in report["by_priority"].items():
-        print(f"{priority}: {count}")
-
+    """Display complete ticket statistics exactly once."""
+    return display_report(tickets)
 
 def main():
     """Run the CampusFlow Helpdesk application."""
@@ -98,7 +117,11 @@ def main():
         print("3. Assign ticket")
         print("4. Update ticket status")
         print("5. View report")
-        print("6. Exit")
+        print("6. Search tickets")
+        print("7. Engineering Understanding Check")
+        print("8. View Ticket Notes")
+        print("9. Add Follow-up Note")
+        print("10. Exit")
 
         choice = input("Choose an option: ").strip()
 
@@ -113,10 +136,31 @@ def main():
         elif choice == "5":
             show_report(tickets)
         elif choice == "6":
+            search_tickets_cli(tickets)
+        
+        elif choice == "7":
+            run_understanding_check()
+
+        elif choice == "8":
+            view_ticket_notes(
+                lambda ticket_id: find_ticket(tickets, ticket_id)
+            )
+
+        elif choice == "9":
+            add_follow_up_note(
+                lambda ticket_id, author, message:
+                    save_follow_up_note(
+                        tickets, ticket_id, author, message
+                    ),
+                lambda ticket_id: find_ticket(tickets, ticket_id),
+            )
+
+        elif choice == "10":
             print("Goodbye!")
             break
+
         else:
-            print("Invalid choice. Please choose 1 to 6.")
+            print("Invalid choice. Please choose 1 to 10.")
 
 
 if __name__ == "__main__":
